@@ -4,7 +4,7 @@
     "author": "Edu Meneses",
     "institution": "SAT/IDMIL (2022-2024)",
     "APpasswd": "mappings",
-    "wifiSSID": "networkSSID",
-    "wifiPSK": "mappings",
-    "persistentAP": 1
+    "wifiSSID": "tiredlink",
+    "wifiPSK": "potato01",
+    "persistentAP": 0
 }

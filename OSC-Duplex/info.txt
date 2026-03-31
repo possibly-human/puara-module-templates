@@ -1,0 +1,101 @@
+54 cm distance between esp32 edge and router edge
+Mac is ethernet linked to router
+
+
+1. Wifi connection
+
+    ESP32 IP: 192.168.0.57
+
+    Mac IP: 192.168.0.160
+
+    Router IP: 192.168.0.1
+
+    # Mac pings ESP32
+    100 packets transmitted, 100 packets received, 0.0% packet loss
+    round-trip min/avg/max/stddev = 2.388/7.137/25.269/5.358 ms
+
+    # Mac pings router
+    100 packets transmitted, 100 packets received, 0.0% packet loss
+    round-trip min/avg/max/stddev = 0.047/0.129/0.214/0.033 ms
+
+2. UDP benchmark
+    ESP32 sends UDP test packets to the Mac
+    Mac echoes them back immediately
+    ESP32 computes RTT using micros()
+    ESP32 accumulates stats per mode, at the end of each mode, ESP32 sends a summary packet to the Mac
+    Mac listens on UDP 9000, when it receives a test packet:
+    logs it to CSV
+    echoes it back to ESP32 port 9001
+    when it receives a summary packet:
+    prints the summary
+    writes it to a summary CSV
+
+    === 10Hz SUMMARY ===
+    packets tested: 149
+    min RTT: 3.300 ms
+    avg RTT: 7.531 ms
+    max RTT: 61.299 ms
+    avg send overhead on ESP32: 0.266 ms
+    sustained packet loss: none observed
+    rare high-latency spikes: yes (1 packets > 50 ms)
+
+    === 100Hz SUMMARY ===
+    packets tested: 1487
+    min RTT: 3.022 ms
+    avg RTT: 6.014 ms
+    max RTT: 96.502 ms
+    avg send overhead on ESP32: 0.259 ms
+    packet loss: 4 packets
+    rare high-latency spikes: yes (10 packets > 50 ms)
+
+    === 500Hz SUMMARY ===
+    packets tested: 5783
+    min RTT: 2.792 ms
+    avg RTT: 6.417 ms
+    max RTT: 51.035 ms
+    avg send overhead on ESP32: 0.272 ms
+    packet loss: 149 packets
+    rare high-latency spikes: yes (3 packets > 50 ms)
+
+    === FAST SUMMARY ===
+    packets tested: 10009
+    min RTT: 5.309 ms
+    avg RTT: 11.405 ms
+    max RTT: 115.318 ms
+    avg send overhead on ESP32: 0.367 ms
+    packet loss: 2534 packets
+    rare high-latency spikes: yes (39 packets > 50 ms)
+
+3. OSC 
+
+
+
+ESP32
+
+Puara handles Wi-Fi / settings
+
+benchmark loop replaces dummy sensor loop
+
+sends /bench
+
+receives echoed /bench
+
+stores per-packet trace in RAM
+
+dumps trace CSV over serial after mode
+
+sends /summary to Mac
+
+Mac Python
+
+listens on UDP 9000
+
+parses /bench
+
+writes receive/echo timestamps to CSV
+
+echoes the same raw bytes back
+
+parses /summary
+
+writes summary CSV

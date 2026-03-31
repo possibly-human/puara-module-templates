@@ -2,15 +2,15 @@
     "settings": [
         {
             "name": "oscIP",
-            "value": "192.168.4.2"
+            "value": "192.168.0.160"
         },
         {
             "name": "oscPORT",
-            "value": 8000
+            "value": 9000
         },
         {
             "name": "localPORT",
-            "value": 8000
+            "value": 9001
         }
     ]
 }
